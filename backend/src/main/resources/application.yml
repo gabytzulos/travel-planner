@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: travel-planner
+
+  datasource:
+    url: jdbc:postgresql://localhost:${DB_PORT:5433}/${POSTGRES_DB:travelPlannerDb}
+    username: ${POSTGRES_USER:user}
+    password: ${POSTGRES_PASSWORD:password}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+jwt:
+  issuer: travelplanner-api
+  secret: ${JWT_SECRET:wMkYs+kSHEP5CdnR4OHoblwEFffcAdOPPYw5kbc9tps=}
+  expirationMs: 10000
