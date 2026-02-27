@@ -72,7 +72,6 @@ public class AuthService {
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        Objects.requireNonNull(userDetails);
         Map<String, Object> extraClaims = Map.of(
                 JwtClaims.EMAIL, userDetails.getEmail(),
                 JwtClaims.FIRST_NAME, userDetails.getFirstName(),
