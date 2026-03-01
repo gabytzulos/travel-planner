@@ -19,4 +19,4 @@ spring:
 jwt:
   issuer: travelplanner-api
   secret: ${JWT_SECRET:wMkYs+kSHEP5CdnR4OHoblwEFffcAdOPPYw5kbc9tps=}
-  expirationMs: 10000
+  expirationMs: 3600000
