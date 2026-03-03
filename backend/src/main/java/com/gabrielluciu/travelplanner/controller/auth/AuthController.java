@@ -1,18 +1,21 @@
 package com.gabrielluciu.travelplanner.controller.auth;
 
+import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
 import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
 import com.gabrielluciu.travelplanner.dto.auth.LoginResponse;
 import com.gabrielluciu.travelplanner.dto.auth.RegisterRequest;
-import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
+import com.gabrielluciu.travelplanner.security.JwtService;
 import com.gabrielluciu.travelplanner.security.SecurityConstants;
 import com.gabrielluciu.travelplanner.service.auth.AuthService;
-import com.gabrielluciu.travelplanner.security.JwtService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")

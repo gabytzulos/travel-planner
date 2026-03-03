@@ -2,9 +2,7 @@ package com.gabrielluciu.travelplanner.dto.trip;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 
-@Builder
 public record DestinationDto(
 
         @NotBlank(message = "City is required")

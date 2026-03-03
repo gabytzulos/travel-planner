@@ -7,7 +7,7 @@ import com.gabrielluciu.travelplanner.entity.Trip;
 import com.gabrielluciu.travelplanner.entity.auth.User;
 import com.gabrielluciu.travelplanner.exception.ResourceNotFoundException;
 import com.gabrielluciu.travelplanner.repository.TripRepository;
-import com.gabrielluciu.travelplanner.security.SecurityUtils;
+import com.gabrielluciu.travelplanner.security.CurrentUser;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,43 +21,37 @@ public class TripService {
 
     private final TripRepository tripRepository;
     private final DestinationService destinationService;
+    private final CurrentUser currentUser;
 
-    public TripResponse createTrip(UUID userId, CreateTripRequest request) {
+    public TripResponse createTrip(CreateTripRequest request) {
         Trip trip = Trip.builder()
-                .user(new User(userId)) // no need to fetch the user
-                .title(request.getTitle())
-                .startDate(request.getStartDate())
-                .endDate(request.getEndDate())
-                .notes(request.getNotes())
+                .user(new User(currentUser.getId())) // no need to fetch the user
+                .title(request.title())
+                .startDate(request.startDate())
+                .endDate(request.endDate())
+                .notes(request.notes())
                 .destinations(new ArrayList<>())
                 .build();
 
-        this.appendDestinationsToTrip(trip, request.getDestinations());
+        this.appendDestinationsToTrip(trip, request.destinations());
         this.tripRepository.save(trip);
 
         return tripEntityToDto(trip);
     }
 
-    public List<TripResponse> getAllUserTrips(UUID userId) {
-        List<Trip> trips = this.tripRepository.findByUser(new User(userId));
-
+    public List<TripResponse> getAllUserTrips() {
+        List<Trip> trips = this.tripRepository.findByUser(new User(currentUser.getId()));
         return trips.stream().map(this::tripEntityToDto).toList();
     }
 
     public TripResponse getUserTripById(UUID tripId) {
-        UUID currentUserId = SecurityUtils.getCurrentUserId();
-        Trip trip = this.tripRepository.findByIdAndUserId(tripId, currentUserId).orElseThrow(() -> new ResourceNotFoundException("Trip not found."));
-
+        Trip trip = this.tripRepository.findByIdAndUserId(tripId, currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Trip not found."));
         return this.tripEntityToDto(trip);
     }
 
     private TripResponse tripEntityToDto(Trip trip) {
         List<DestinationDto> destinationDtos = trip.getDestinations().stream()
-                .map(d -> DestinationDto.builder()
-                        .city(d.getCity())
-                        .country(d.getCountry())
-                        .build()
-                ).toList();
+                .map(d -> new DestinationDto(d.getCity(), d.getCountry())).toList();
 
         return TripResponse.builder()
                 .id(trip.getId())
@@ -71,6 +65,7 @@ public class TripService {
     }
 
     private void appendDestinationsToTrip(Trip trip, List<DestinationDto> destDtos) {
+        // todo: improve by using a hash for each location and make a batched query
         for (var destDto : destDtos) {
             trip.getDestinations().add(this.destinationService.findOrCreateDestination(destDto));
         }

@@ -1,7 +1,7 @@
 package com.gabrielluciu.travelplanner.service.auth;
 
-import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
 import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
+import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
 import com.gabrielluciu.travelplanner.dto.auth.RegisterRequest;
 import com.gabrielluciu.travelplanner.entity.auth.User;
 import com.gabrielluciu.travelplanner.exception.EmailAlreadyInUseException;

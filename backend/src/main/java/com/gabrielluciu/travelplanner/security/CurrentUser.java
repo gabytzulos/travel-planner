@@ -1,19 +1,20 @@
 package com.gabrielluciu.travelplanner.security;
 
+import com.gabrielluciu.travelplanner.exception.NoAuthenticatedUserException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-public class SecurityUtils {
-    private SecurityUtils() {
-    }
+@Component
+public class CurrentUser {
 
-    public static UUID getCurrentUserId() {
+    public UUID getId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated()) {
-            throw new IllegalStateException("No authenticated user found");
+            throw new NoAuthenticatedUserException();
         }
 
         Jwt jwt = (Jwt) auth.getPrincipal();
