@@ -8,6 +8,7 @@ import com.gabrielluciu.travelplanner.entity.auth.User;
 import com.gabrielluciu.travelplanner.exception.ResourceNotFoundException;
 import com.gabrielluciu.travelplanner.repository.TripRepository;
 import com.gabrielluciu.travelplanner.security.CurrentUser;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class TripService {
     private final DestinationService destinationService;
     private final CurrentUser currentUser;
 
+    @Transactional
     public TripResponse createTrip(CreateTripRequest request) {
         Trip trip = Trip.builder()
                 .user(new User(currentUser.getId())) // no need to fetch the user
