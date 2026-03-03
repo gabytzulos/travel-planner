@@ -25,7 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationConverter jwtAuthenticationConverter) {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
                         .anyRequest().authenticated()
                 )

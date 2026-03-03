@@ -1,11 +1,11 @@
 package com.gabrielluciu.travelplanner.service.auth;
 
-import com.gabrielluciu.travelplanner.dto.auth.LoginRequestDto;
-import com.gabrielluciu.travelplanner.dto.auth.AuthResponseDto;
-import com.gabrielluciu.travelplanner.dto.auth.RegisterRequestDto;
-import com.gabrielluciu.travelplanner.entity.auth.UserEntity;
+import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
+import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
+import com.gabrielluciu.travelplanner.dto.auth.RegisterRequest;
+import com.gabrielluciu.travelplanner.entity.auth.User;
 import com.gabrielluciu.travelplanner.exception.EmailAlreadyInUseException;
-import com.gabrielluciu.travelplanner.repository.user.UserRepository;
+import com.gabrielluciu.travelplanner.repository.UserRepository;
 import com.gabrielluciu.travelplanner.security.CustomUserDetails;
 import com.gabrielluciu.travelplanner.security.JwtClaims;
 import com.gabrielluciu.travelplanner.security.JwtService;
@@ -28,13 +28,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthResponseDto register(RegisterRequestDto registerRequestDto) {
+    public AuthResponse register(RegisterRequest registerRequestDto) {
 
         if (this.userRepository.existsByEmail(registerRequestDto.email())) {
             throw new EmailAlreadyInUseException(registerRequestDto.email());
         }
 
-        UserEntity userEntity = UserEntity.builder()
+        User userEntity = User.builder()
                 .email(registerRequestDto.email())
                 .passwordHash(this.passwordEncoder.encode(registerRequestDto.password()))
                 .firstName(registerRequestDto.firstName())
@@ -55,7 +55,7 @@ public class AuthService {
 
         String token = this.jwtService.generateToken(userEntity.getId(), List.of("USER"), extraClaims); // todo: roles
 
-        return AuthResponseDto.builder()
+        return AuthResponse.builder()
                 .id(userEntity.getId())
                 .email(userEntity.getEmail())
                 .firstName(userEntity.getFirstName())
@@ -64,9 +64,9 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponseDto login(LoginRequestDto loginRequestDto) {
+    public AuthResponse login(LoginRequest loginRequest) {
         Authentication authentication = this.authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.email(), loginRequestDto.password())
+                new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password())
         );
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -79,7 +79,7 @@ public class AuthService {
 
         String token = this.jwtService.generateToken(userDetails.getId(), List.of("USER"), extraClaims); // todo: roles
 
-        return AuthResponseDto.builder()
+        return AuthResponse.builder()
                 .id(userDetails.getId())
                 .email(userDetails.getEmail())
                 .firstName(userDetails.getFirstName())

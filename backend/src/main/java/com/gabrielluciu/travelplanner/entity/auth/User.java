@@ -18,7 +18,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class UserEntity {
+public class User {
 
     @Id
     @GeneratedValue
@@ -35,4 +35,12 @@ public class UserEntity {
 
     @UpdateTimestamp
     private Instant updatedAt;
+
+    /**
+     * Use only if the id is trusted
+     */
+    public User (UUID id) {
+        this.id = id;
+    }
+
 }

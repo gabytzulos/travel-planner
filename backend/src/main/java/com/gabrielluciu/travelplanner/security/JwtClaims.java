@@ -11,5 +11,5 @@ public class JwtClaims {
     public static final String LAST_NAME = "lastName";
     public static final String ROLES = "roles";
 
-    public static final Set<String> RESERVED = Set.of("sub", "roles", "exp", "iat", "iss", "jti");
+    public static final Set<String> RESERVED = Set.of("sub", ROLES, "exp", "iat", "iss", "jti");
 }

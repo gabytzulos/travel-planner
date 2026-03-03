@@ -2,7 +2,7 @@ package com.gabrielluciu.travelplanner.dto.auth;
 
 import jakarta.validation.constraints.*;
 
-public record RegisterRequestDto(
+public record RegisterRequest(
 
         @Email
         @NotEmpty(message = "Email is required")
@@ -18,7 +18,7 @@ public record RegisterRequestDto(
         @Size(min = 8, message = "Password must be at least 8 characters long")
         String password
 ) {
-    public RegisterRequestDto {
+    public RegisterRequest {
         email = email == null ? null : email.trim();
         firstName = firstName == null ? null : firstName.trim();
         lastName = lastName == null ? null : lastName.trim();

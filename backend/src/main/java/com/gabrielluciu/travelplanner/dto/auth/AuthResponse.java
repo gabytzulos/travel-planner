@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record AuthResponseDto(
+public record AuthResponse(
         UUID id,
         String email,
         String firstName,

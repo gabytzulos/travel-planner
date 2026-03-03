@@ -29,9 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
-    public ResponseEntity<ApiErrorResponse> handleEmailAlreadyInUse(
-            EmailAlreadyInUseException ex
-    ) {
+    public ResponseEntity<ApiErrorResponse> handleEmailAlreadyInUse(EmailAlreadyInUseException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiErrorResponse(ex.getMessage()));
     }
 

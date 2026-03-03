@@ -1,6 +1,6 @@
 package com.gabrielluciu.travelplanner.dto.auth;
 
-public record LoginRequestDto(
+public record LoginRequest(
         String email,
         String password
 ) {

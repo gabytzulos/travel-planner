@@ -1,6 +1,6 @@
 package com.gabrielluciu.travelplanner.security;
 
-import com.gabrielluciu.travelplanner.entity.auth.UserEntity;
+import com.gabrielluciu.travelplanner.entity.auth.User;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -33,7 +33,7 @@ public final class CustomUserDetails implements UserDetails {
     private final boolean emailVerified;
 
     public CustomUserDetails(
-            UserEntity user,
+            User user,
             Collection<? extends GrantedAuthority> authorities
     ) {
         this.id = user.getId();

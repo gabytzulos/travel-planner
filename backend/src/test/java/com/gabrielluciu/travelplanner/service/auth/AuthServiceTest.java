@@ -1,11 +1,11 @@
 package com.gabrielluciu.travelplanner.service.auth;
 
-import com.gabrielluciu.travelplanner.dto.auth.AuthResponseDto;
-import com.gabrielluciu.travelplanner.dto.auth.LoginRequestDto;
-import com.gabrielluciu.travelplanner.dto.auth.RegisterRequestDto;
-import com.gabrielluciu.travelplanner.entity.auth.UserEntity;
+import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
+import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
+import com.gabrielluciu.travelplanner.dto.auth.RegisterRequest;
+import com.gabrielluciu.travelplanner.entity.auth.User;
 import com.gabrielluciu.travelplanner.exception.EmailAlreadyInUseException;
-import com.gabrielluciu.travelplanner.repository.user.UserRepository;
+import com.gabrielluciu.travelplanner.repository.UserRepository;
 import com.gabrielluciu.travelplanner.security.CustomUserDetails;
 import com.gabrielluciu.travelplanner.security.JwtService;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+class AuthServiceTest {
 
     @Mock
     private AuthenticationManager authenticationManager;
@@ -47,7 +47,7 @@ public class AuthServiceTest {
     @Test
     void register_success() {
         // Arrange
-        RegisterRequestDto requestDto = new RegisterRequestDto(
+        RegisterRequest requestDto = new RegisterRequest(
                 "test@email.com",
                 "FirstName",
                 "LastName",
@@ -61,8 +61,8 @@ public class AuthServiceTest {
         when(passwordEncoder.encode(requestDto.password())).thenReturn(encodedPassword);
 
         // set the id on the entity
-        when(userRepository.save(any(UserEntity.class))).thenAnswer(invocation -> {
-            UserEntity u = invocation.getArgument(0);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User u = invocation.getArgument(0);
             u.setId(userIdMock);
             return u;
         });
@@ -70,7 +70,7 @@ public class AuthServiceTest {
         when(jwtService.generateToken(eq(userIdMock), any(), anyMap())).thenReturn(jwtMock);
 
         // Act
-        AuthResponseDto responseDto = this.authService.register(requestDto);
+        AuthResponse responseDto = this.authService.register(requestDto);
 
         // Assert
         assertNotNull(responseDto);
@@ -80,14 +80,14 @@ public class AuthServiceTest {
         assertEquals(requestDto.lastName(), responseDto.lastName());
         assertEquals(jwtMock, responseDto.token());
 
-        verify(userRepository).save(any(UserEntity.class));
+        verify(userRepository).save(any(User.class));
         verify(passwordEncoder).encode(requestDto.password());
     }
 
     @Test
     void register_emailAlreadyExists_throwsException() {
         // Arrange
-        RegisterRequestDto requestDto = new RegisterRequestDto(
+        RegisterRequest requestDto = new RegisterRequest(
                 "test@email.com",
                 "FirstName",
                 "LastName",
@@ -101,7 +101,7 @@ public class AuthServiceTest {
 
         assertTrue(exception.getMessage().contains(requestDto.email()));
 
-        verify(userRepository, never()).save(any(UserEntity.class));
+        verify(userRepository, never()).save(any(User.class));
         verify(passwordEncoder, never()).encode(any());
         verifyNoInteractions(jwtService);
     }
@@ -109,7 +109,7 @@ public class AuthServiceTest {
     @Test
     void login_success() {
         // Arrange
-        LoginRequestDto requestDto = new LoginRequestDto("test@email.com", "password");
+        LoginRequest requestDto = new LoginRequest("test@email.com", "password");
         UUID userIdMock = UUID.randomUUID();
         String jwtMock = "jwtMock";
 
@@ -126,7 +126,7 @@ public class AuthServiceTest {
         when(jwtService.generateToken(eq(userIdMock), any(), any())).thenReturn(jwtMock);
 
         // Act
-        AuthResponseDto responseDto = this.authService.login(requestDto);
+        AuthResponse responseDto = this.authService.login(requestDto);
 
         // Assert
         assertNotNull(responseDto);

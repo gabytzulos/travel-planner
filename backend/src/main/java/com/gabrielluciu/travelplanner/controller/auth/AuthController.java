@@ -1,9 +1,9 @@
 package com.gabrielluciu.travelplanner.controller.auth;
 
-import com.gabrielluciu.travelplanner.dto.auth.LoginRequestDto;
-import com.gabrielluciu.travelplanner.dto.auth.LoginResponseDto;
-import com.gabrielluciu.travelplanner.dto.auth.RegisterRequestDto;
-import com.gabrielluciu.travelplanner.dto.auth.AuthResponseDto;
+import com.gabrielluciu.travelplanner.dto.auth.LoginRequest;
+import com.gabrielluciu.travelplanner.dto.auth.LoginResponse;
+import com.gabrielluciu.travelplanner.dto.auth.RegisterRequest;
+import com.gabrielluciu.travelplanner.dto.auth.AuthResponse;
 import com.gabrielluciu.travelplanner.security.SecurityConstants;
 import com.gabrielluciu.travelplanner.service.auth.AuthService;
 import com.gabrielluciu.travelplanner.security.JwtService;
@@ -23,24 +23,24 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/login")
-    public LoginResponseDto login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        AuthResponseDto authResponse = this.authService.login(loginRequestDto);
+    public LoginResponse login(@Valid @RequestBody LoginRequest request, HttpServletResponse response) {
+        AuthResponse authResponse = this.authService.login(request);
 
         ResponseCookie jwtCookie = generateJwtCookie(authResponse.token());
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
-        return new LoginResponseDto(authResponse);
+        return new LoginResponse(authResponse);
     }
 
     @PostMapping("/register")
-    public LoginResponseDto register(@Valid @RequestBody RegisterRequestDto registerRequestDto, HttpServletResponse response) {
-        AuthResponseDto authResponse = this.authService.register(registerRequestDto);
+    public LoginResponse register(@Valid @RequestBody RegisterRequest registerRequestDto, HttpServletResponse response) {
+        AuthResponse authResponse = this.authService.register(registerRequestDto);
 
         // todo: remove after adding email validation
         ResponseCookie jwtCookie = generateJwtCookie(authResponse.token());
         response.addHeader(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
-        return new LoginResponseDto(authResponse);
+        return new LoginResponse(authResponse);
     }
 
     private ResponseCookie generateJwtCookie(String token) {

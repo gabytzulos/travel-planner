@@ -1,7 +1,7 @@
 package com.gabrielluciu.travelplanner.service.auth;
 
-import com.gabrielluciu.travelplanner.entity.auth.UserEntity;
-import com.gabrielluciu.travelplanner.repository.user.UserRepository;
+import com.gabrielluciu.travelplanner.entity.auth.User;
+import com.gabrielluciu.travelplanner.repository.UserRepository;
 import com.gabrielluciu.travelplanner.security.CustomUserDetails;
 import lombok.AllArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public @NonNull UserDetails loadUserByUsername(@NonNull String email) throws UsernameNotFoundException {
-        UserEntity user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found."));
+        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found."));
 
         // todo
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
