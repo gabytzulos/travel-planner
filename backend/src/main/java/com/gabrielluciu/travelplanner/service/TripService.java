@@ -73,4 +73,12 @@ public class TripService {
         }
     }
 
+    @Transactional
+    public void deleteTripById(UUID tripId) {
+        // validate that the trip exists and is owned by the current user
+        Trip trip = this.tripRepository.findByIdAndUserId(tripId, currentUser.getId()).orElseThrow(() -> new ResourceNotFoundException("Trip not found."));
+
+        this.tripRepository.delete(trip);
+    }
+
 }

@@ -2,6 +2,7 @@ package com.gabrielluciu.travelplanner.controller;
 
 
 import com.gabrielluciu.travelplanner.dto.trip.CreateTripRequest;
+import com.gabrielluciu.travelplanner.dto.trip.TripDeletedResponse;
 import com.gabrielluciu.travelplanner.dto.trip.TripResponse;
 import com.gabrielluciu.travelplanner.service.TripService;
 import jakarta.validation.Valid;
@@ -31,6 +32,12 @@ public class TripController {
     @GetMapping("/{id}")
     public TripResponse getTripById(@PathVariable UUID id) {
         return this.tripService.getUserTripById(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public TripDeletedResponse deleteById(@PathVariable UUID id) {
+        this.tripService.deleteTripById(id);
+        return new TripDeletedResponse(String.format("Trip '%s' deleted successfully.", id.toString()));
     }
 
 }
