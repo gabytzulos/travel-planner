@@ -3,6 +3,7 @@ package com.gabrielluciu.travelplanner.dto.trip;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
@@ -19,8 +20,12 @@ public record CreateTripRequest(
         @Valid
         List<DestinationDto> destinations,
 
+        @NotNull(message = "Start date is required")
         LocalDate startDate,
+
+        @NotNull(message = "End date is required")
         LocalDate endDate,
+
         String notes
 ) {
 }
