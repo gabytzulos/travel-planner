@@ -28,6 +28,8 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+		<sonar.organization>gabytzulos</sonar.organization>
+		<sonar.projectKey>gabytzulos_travel-planner</sonar.projectKey>
 	</properties>
 	<dependencies>
 		<dependency>
